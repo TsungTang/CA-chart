@@ -1,1 +1,0 @@
-{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,+FAA+F,CAE/F,eAGE,4BACF","file":"style.aa48898a.css","sourceRoot":"..","sourcesContent":["@import url(\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap\");\n\nhtml,\nbody,\ntext {\n  font-family: \"Inter\", sans-serif;\n}\n"]}
