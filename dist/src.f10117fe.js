@@ -31306,25 +31306,27 @@ var computedTextWidth = function computedTextWidth(data) {
 };
 /*
  * y axis text label
- * @param {string} content
- * @param {number} height
- * @param {number} marginLeft - should be margin left
  */
 exports.computedTextWidth = computedTextWidth;
-var yTextLabel = function yTextLabel(f, content, height, marginLeft) {
+var yTextLabel = function yTextLabel(_ref) {
+  var f = _ref.f,
+    content = _ref.content,
+    height = _ref.height,
+    marginLeft = _ref.marginLeft;
   // text label for the y axis
   f.append('text').attr('transform', 'rotate(-90)').attr('class', 'y label').attr('y', 0 - marginLeft).attr('x', 0 - height / 2).attr('dy', '1em').style('text-anchor', 'middle').text(content);
 };
 /**
- * x axis text label
- * @param {number} width
- * @param {string} content
- * @param {number} height
- * @param {number} marginTop - should be margin top
- */
+ * x axis text label*/
 exports.yTextLabel = yTextLabel;
-var xTextLabel = function xTextLabel(f, content, width, height, marginBottom) {
-  f.append('text').attr('y', height + marginBottom + 30).attr('x', width / 2).attr('dy', '0.75em').attr('class', 'x label').style('text-anchor', 'middle').text(content);
+var xTextLabel = function xTextLabel(_ref2) {
+  var f = _ref2.f,
+    content = _ref2.content,
+    width = _ref2.width,
+    height = _ref2.height,
+    marginBottom = _ref2.marginBottom,
+    dy = _ref2.dy;
+  f.append('text').attr('y', height + marginBottom + 30).attr('x', width / 2).attr('dy', dy !== null && dy !== void 0 ? dy : 15).attr('class', 'x label').style('text-anchor', 'middle').text(content);
 };
 exports.xTextLabel = xTextLabel;
 var createBasicSVG = function createBasicSVG(selector, plot, margin) {
@@ -31374,36 +31376,36 @@ var addTooltips = function addTooltips(f, contentFun) {
   });
 };
 exports.addTooltips = addTooltips;
-var appendTextToXTicks = function appendTextToXTicks(_ref) {
-  var selector = _ref.selector,
-    _ref$index = _ref.index,
-    index = _ref$index === void 0 ? 0 : _ref$index,
-    label = _ref.label,
-    textAttrs = _ref.textAttrs,
-    textBoxAttrs = _ref.textBoxAttrs;
+var appendTextToXTicks = function appendTextToXTicks(_ref3) {
+  var selector = _ref3.selector,
+    _ref3$index = _ref3.index,
+    index = _ref3$index === void 0 ? 0 : _ref3$index,
+    label = _ref3.label,
+    textAttrs = _ref3.textAttrs,
+    textBoxAttrs = _ref3.textBoxAttrs;
   var res = d3.selectAll(selector);
   var selection = d3.select(res.nodes()[index]);
   var BBox = selection.node().getBBox();
-  var textNode = selection.append('text').attr('text-anchor', 'middle').attr('y', BBox.height).attr('dy', '2em').attr('font-size', '15px').text(label);
+  var textNode = selection.append('text').attr('text-anchor', 'middle').attr('y', BBox.height).attr('dy', '2em').attr('font-size', '15px').attr('font-weight', 700).text(label);
   var TextBBox = textNode.node().getBBox();
-  var TextBoxNode = selection.insert('rect', 'text').attr('x', TextBBox.x - 10).attr('y', TextBBox.y - 10).attr('rx', 5).attr('dy', '0.7em').attr('fill', 'yellow').attr('width', function (d) {
+  var TextBoxNode = selection.insert('rect', 'text').attr('x', TextBBox.x - 10).attr('y', TextBBox.y - 5).attr('rx', 5).attr('dy', '0.7em').attr('fill', 'yellow').attr('width', function (d) {
     return TextBBox.width + 20;
   }).attr('height', function (d) {
-    return TextBBox.height + 20;
+    return TextBBox.height + 10;
   });
   if (textAttrs) {
-    Object.entries(textAttrs).forEach(function (_ref2) {
-      var _ref3 = _slicedToArray(_ref2, 2),
-        key = _ref3[0],
-        value = _ref3[1];
+    Object.entries(textAttrs).forEach(function (_ref4) {
+      var _ref5 = _slicedToArray(_ref4, 2),
+        key = _ref5[0],
+        value = _ref5[1];
       textNode.attr(key, value);
     });
   }
   if (textBoxAttrs) {
-    Object.entries(textBoxAttrs).forEach(function (_ref4) {
-      var _ref5 = _slicedToArray(_ref4, 2),
-        key = _ref5[0],
-        value = _ref5[1];
+    Object.entries(textBoxAttrs).forEach(function (_ref6) {
+      var _ref7 = _slicedToArray(_ref6, 2),
+        key = _ref7[0],
+        value = _ref7[1];
       TextBoxNode.attr(key, value);
     });
   }
@@ -31537,13 +31539,24 @@ var horizontalBarChart = function horizontalBarChart(_ref) {
   // y axis label
   if (yLabel) {
     svg.call(function () {
-      return (0, _utils.yTextLabel)(svg, yLabel, plotHeight, margin.left);
+      return (0, _utils.yTextLabel)({
+        f: svg,
+        content: yLabel,
+        height: plotHeight,
+        marginLeft: margin.left
+      });
     });
   }
   // X axis label:
   if (xLabel) {
     svg.call(function () {
-      return (0, _utils.xTextLabel)(svg, xLabel, plotWidth, plotHeight, margin.top);
+      return (0, _utils.xTextLabel)({
+        f: svg,
+        content: xLabel,
+        width: plotWidth,
+        height: plotHeight,
+        marginBottom: margin.top
+      });
     });
   }
 };
@@ -31567,6 +31580,7 @@ var verticalBarChart = function verticalBarChart(_ref) {
     xLabel = _ref.xLabel,
     yLabel = _ref.yLabel,
     barColor = _ref.barColor,
+    basedMargin = _ref.basedMargin,
     _ref$showBarText = _ref.showBarText,
     showBarText = _ref$showBarText === void 0 ? true : _ref$showBarText,
     _ref$forceSymmetry = _ref.forceSymmetry,
@@ -31574,8 +31588,6 @@ var verticalBarChart = function verticalBarChart(_ref) {
     _ref$padding = _ref.padding,
     padding = _ref$padding === void 0 ? 0.1 : _ref$padding,
     tooltipContent = _ref.tooltipContent;
-  // if (data.length > 10)
-  //   throw new Error("Numbers of Bars shoud less or equal than 10");
   var _computedTextWidth = (0, _utils.computedTextWidth)(data.map(function (d) {
       return d.name;
     }), {
@@ -31591,13 +31603,15 @@ var verticalBarChart = function verticalBarChart(_ref) {
       nameTruncateText: outputData[i].truncateText
     });
   });
-  var mb = sideLength + 50;
-  var margin = {
+  var defaultMargin = {
     top: 20,
     right: 20,
-    bottom: mb,
+    bottom: 50,
     left: 95
   };
+  var margin = Object.assign(Object.assign({}, defaultMargin), basedMargin);
+  var mbAddSideLen = sideLength + margin.bottom;
+  margin.bottom = mbAddSideLen;
   var plotWidth = width - margin.left - 20;
   var plotHeight = height - margin.top - margin.bottom;
   var svg = (0, _utils.createBasicSVG)(selector, {
@@ -31680,13 +31694,26 @@ var verticalBarChart = function verticalBarChart(_ref) {
   // y axis label
   if (yLabel) {
     svg.call(function () {
-      return (0, _utils.yTextLabel)(svg, yLabel, plotHeight, margin.left);
+      return (0, _utils.yTextLabel)({
+        f: svg,
+        content: yLabel,
+        height: plotHeight,
+        marginLeft: margin.left
+      });
     });
   }
   // X axis label:
   if (xLabel) {
+    var dy = (basedMargin === null || basedMargin === void 0 ? void 0 : basedMargin.bottom) ? basedMargin.bottom - defaultMargin.bottom : undefined;
     svg.call(function () {
-      return (0, _utils.xTextLabel)(svg, xLabel, plotWidth, plotHeight, sideLength);
+      return (0, _utils.xTextLabel)({
+        f: svg,
+        content: xLabel,
+        width: plotWidth,
+        height: plotHeight,
+        marginBottom: sideLength,
+        dy: dy
+      });
     });
   }
 };
@@ -31748,11 +31775,14 @@ var _utils = require("./utils");
   width: 650,
   height: 600,
   data: _datas.inputData.slice(0, 3),
-  xLabel: '改變變項',
-  yLabel: '改變變項',
+  xLabel: 'ershgsretherthdrhtershgsreetherthdrhtershgsretherthdrht',
+  yLabel: '變項',
   forceSymmetry: true,
   showBarText: false,
   padding: 0.9,
+  basedMargin: {
+    bottom: 90
+  },
   barColor: function barColor(d) {
     return d.value > 0 ? '#bbffff' : '#ffbbdd';
   },
@@ -31795,7 +31825,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59782" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56545" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

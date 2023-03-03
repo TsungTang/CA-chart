@@ -21,13 +21,12 @@ export const verticalBarChart = ({
   xLabel,
   yLabel,
   barColor,
+  basedMargin,
   showBarText = true,
   forceSymmetry = false,
   padding = 0.1,
   tooltipContent
 }: TBarChart) => {
-  // if (data.length > 10)
-  //   throw new Error("Numbers of Bars shoud less or equal than 10");
   const { fittedLongestWidth, outputData } = computedTextWidth(
     data.map(d => d.name),
     {
@@ -41,8 +40,12 @@ export const verticalBarChart = ({
     ...d,
     nameTruncateText: outputData[i].truncateText
   }));
-  const mb = sideLength + 50;
-  const margin = { top: 20, right: 20, bottom: mb, left: 95 };
+
+  const defaultMargin = { top: 20, right: 20, bottom: 50, left: 95 };
+  const margin = { ...defaultMargin, ...basedMargin };
+  const mbAddSideLen = sideLength + margin.bottom;
+  margin.bottom = mbAddSideLen;
+
   const plotWidth = width - margin.left - 20;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -128,10 +131,22 @@ export const verticalBarChart = ({
 
   // y axis label
   if (yLabel) {
-    svg.call(() => yTextLabel(svg, yLabel, plotHeight, margin.left));
+    svg.call(() =>
+      yTextLabel({ f: svg, content: yLabel, height: plotHeight, marginLeft: margin.left })
+    );
   }
   // X axis label:
   if (xLabel) {
-    svg.call(() => xTextLabel(svg, xLabel, plotWidth, plotHeight, sideLength));
+    const dy = basedMargin?.bottom ? basedMargin.bottom - defaultMargin.bottom : undefined;
+    svg.call(() =>
+      xTextLabel({
+        f: svg,
+        content: xLabel,
+        width: plotWidth,
+        height: plotHeight,
+        marginBottom: sideLength,
+        dy
+      })
+    );
   }
 };

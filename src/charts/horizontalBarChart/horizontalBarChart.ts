@@ -135,11 +135,21 @@ export const horizontalBarChart = ({
 
   // y axis label
   if (yLabel) {
-    svg.call(() => yTextLabel(svg, yLabel, plotHeight, margin.left));
+    svg.call(() =>
+      yTextLabel({ f: svg, content: yLabel, height: plotHeight, marginLeft: margin.left })
+    );
   }
 
   // X axis label:
   if (xLabel) {
-    svg.call(() => xTextLabel(svg, xLabel, plotWidth, plotHeight, margin.top));
+    svg.call(() =>
+      xTextLabel({
+        f: svg,
+        content: xLabel,
+        width: plotWidth,
+        height: plotHeight,
+        marginBottom: margin.top
+      })
+    );
   }
 };

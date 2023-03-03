@@ -32,11 +32,12 @@ verticalBarChart({
   width: 650,
   height: 600,
   data: inputData.slice(0, 3),
-  xLabel: '改變變項',
-  yLabel: '改變變項',
+  xLabel: 'ershgsretherthdrhtershgsreetherthdrhtershgsretherthdrht',
+  yLabel: '變項',
   forceSymmetry: true,
   showBarText: false,
   padding: 0.9,
+  basedMargin: { bottom: 90 },
   barColor: d => (d.value > 0 ? '#bbffff' : '#ffbbdd'),
   tooltipContent: d => `<div>${d.name}</div>
   <div>value: ${d.value.toPrecision(3)}</div>`

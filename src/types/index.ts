@@ -21,8 +21,8 @@ export type TAppendTextToYTicks = {
   selector: string;
   index?: number;
   label: string;
-  textAttrs?: Record<string, string>;
-  textBoxAttrs?: Record<string, string>;
+  textAttrs?: Record<string, string | number>;
+  textBoxAttrs?: Record<string, string | number>;
 };
 
 export type TBarChart = {
@@ -35,6 +35,7 @@ export type TBarChart = {
   barColor?: TBarColor;
   showBarText?: boolean;
   forceSymmetry?: boolean;
+  basedMargin?: { top?: number; right?: number; bottom?: number; left?: number };
   padding?: number;
   tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T) => string;
 };

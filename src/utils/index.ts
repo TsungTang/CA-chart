@@ -70,18 +70,17 @@ export const computedTextWidth = (
   };
 };
 
+type TYTextLabe = {
+  f: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  content: string;
+  height: number;
+  marginLeft: number;
+};
+
 /*
  * y axis text label
- * @param {string} content
- * @param {number} height
- * @param {number} marginLeft - should be margin left
  */
-export const yTextLabel = (
-  f: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
-  content: string,
-  height: number,
-  marginLeft: number
-) => {
+export const yTextLabel = ({ f, content, height, marginLeft }: TYTextLabe) => {
   // text label for the y axis
   f.append('text')
     .attr('transform', 'rotate(-90)')
@@ -93,24 +92,22 @@ export const yTextLabel = (
     .text(content);
 };
 
+type TXTextLabel = {
+  f: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+  content: string;
+  width: number;
+  height: number;
+  marginBottom: number;
+  dy?: string | number;
+};
+
 /**
- * x axis text label
- * @param {number} width
- * @param {string} content
- * @param {number} height
- * @param {number} marginTop - should be margin top
- */
-export const xTextLabel = (
-  f: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
-  content: string,
-  width: number,
-  height: number,
-  marginBottom: number
-) => {
+ * x axis text label*/
+export const xTextLabel = ({ f, content, width, height, marginBottom, dy }: TXTextLabel) => {
   f.append('text')
     .attr('y', height + marginBottom + 30)
     .attr('x', width / 2)
-    .attr('dy', '0.75em')
+    .attr('dy', dy ?? 15)
     .attr('class', 'x label')
     .style('text-anchor', 'middle')
     .text(content);
@@ -214,13 +211,14 @@ export const appendTextToXTicks = ({
     .attr('y', BBox.height)
     .attr('dy', '2em')
     .attr('font-size', '15px')
+    .attr('font-weight', 700)
     .text(label);
 
   const TextBBox = textNode.node().getBBox();
   const TextBoxNode = selection
     .insert('rect', 'text')
     .attr('x', TextBBox.x - 10)
-    .attr('y', TextBBox.y - 10)
+    .attr('y', TextBBox.y - 5)
     .attr('rx', 5)
     .attr('dy', '0.7em')
     .attr('fill', 'yellow')
@@ -228,7 +226,7 @@ export const appendTextToXTicks = ({
       return TextBBox.width + 20;
     })
     .attr('height', function (d) {
-      return TextBBox.height + 20;
+      return TextBBox.height + 10;
     });
 
   if (textAttrs) {
