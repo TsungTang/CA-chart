@@ -31253,7 +31253,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var computedTextWidth = function computedTextWidth(data) {
   var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
     maxWidth: 500,
-    fontSize: "15px"
+    fontSize: '15px'
   };
   var maxWidth = config.maxWidth,
     fontSize = config.fontSize;
@@ -31262,15 +31262,15 @@ var computedTextWidth = function computedTextWidth(data) {
    * @param {number|string} p
    */
   var checkTextWidth = function checkTextWidth(p) {
-    var testingText = "";
-    if (typeof p === "string") {
+    var testingText = '';
+    if (typeof p === 'string') {
       testingText = p;
     } else {
-      var formateFun = d3.format(".3f");
+      var formateFun = d3.format('.3f');
       testingText = formateFun(p); /** 非等寬字會不準 */
     }
 
-    var templateEle = document.createElement("text");
+    var templateEle = document.createElement('text');
     templateEle.style.fontSize = fontSize;
     templateEle.textContent = testingText;
     document.body.appendChild(templateEle);
@@ -31313,7 +31313,7 @@ var computedTextWidth = function computedTextWidth(data) {
 exports.computedTextWidth = computedTextWidth;
 var yTextLabel = function yTextLabel(f, content, height, marginLeft) {
   // text label for the y axis
-  f.append("text").attr("transform", "rotate(-90)").attr("class", "y label").attr("y", 0 - marginLeft).attr("x", 0 - height / 2).attr("dy", "1em").style("text-anchor", "middle").text(content);
+  f.append('text').attr('transform', 'rotate(-90)').attr('class', 'y label').attr('y', 0 - marginLeft).attr('x', 0 - height / 2).attr('dy', '1em').style('text-anchor', 'middle').text(content);
 };
 /**
  * x axis text label
@@ -31324,27 +31324,27 @@ var yTextLabel = function yTextLabel(f, content, height, marginLeft) {
  */
 exports.yTextLabel = yTextLabel;
 var xTextLabel = function xTextLabel(f, content, width, height, marginBottom) {
-  f.append("text").attr("y", height + marginBottom + 30).attr("x", width / 2).attr("dy", "0.75em").attr("class", "x label").style("text-anchor", "middle").text(content);
+  f.append('text').attr('y', height + marginBottom + 30).attr('x', width / 2).attr('dy', '0.75em').attr('class', 'x label').style('text-anchor', 'middle').text(content);
 };
 exports.xTextLabel = xTextLabel;
 var createBasicSVG = function createBasicSVG(selector, plot, margin) {
-  var svg = d3.select(selector).append("svg").attr("class", "tukey-chart").attr("width", plot.width + margin.left + margin.right).attr("height", plot.height + margin.top + margin.bottom).append("g").attr("transform", "translate(".concat(margin.left, ", ").concat(margin.top, ")"));
+  var svg = d3.select(selector).append('svg').attr('class', 'tukey-chart').attr('width', plot.width + margin.left + margin.right).attr('height', plot.height + margin.top + margin.bottom).append('g').attr('transform', "translate(".concat(margin.left, ", ").concat(margin.top, ")"));
   return svg;
 };
 exports.createBasicSVG = createBasicSVG;
 var generateBarFillColorFun = function generateBarFillColorFun(barColor) {
   var hasSetBarColor = !!barColor;
   var barColorFill = function barColorFill(d) {
-    return d.value > 0 ? "#48B776" : "#FC5A62";
+    return d.value > 0 ? '#48B776' : '#FC5A62';
   };
   if (!hasSetBarColor) return barColorFill;
-  if (hasSetBarColor && typeof barColor === "function") {
+  if (hasSetBarColor && typeof barColor === 'function') {
     return barColor;
   } else if (barColor.length === 2) {
     return function (d) {
       return d.value > 0 ? barColor[1] : barColor[0];
     };
-  } else if (typeof barColor === "string") {
+  } else if (typeof barColor === 'string') {
     return function (d) {
       return barColor;
     };
@@ -31353,7 +31353,7 @@ var generateBarFillColorFun = function generateBarFillColorFun(barColor) {
 // TODO: add line type, stroke, ... in future
 exports.generateBarFillColorFun = generateBarFillColorFun;
 var drawLine = function drawLine(f, start, end) {
-  f.append("line").style("stroke", "#555555").style("stroke-width", 1).style("stroke-dasharray", "10,5").attr("x1", start.x).attr("y1", start.y).attr("x2", end.x).attr("y2", end.y);
+  f.append('line').style('stroke', '#555555').style('stroke-width', 1).style('stroke-dasharray', '10,5').attr('x1', start.x).attr('y1', start.y).attr('x2', end.x).attr('y2', end.y);
 };
 exports.drawLine = drawLine;
 var drawAxis = function drawAxis(params) {
@@ -31361,16 +31361,16 @@ var drawAxis = function drawAxis(params) {
     axisCall = params.axisCall,
     isXAxis = params.isXAxis,
     plotHeight = params.plotHeight;
-  f.append("g").attr("transform", isXAxis ? "translate(0, ".concat(plotHeight, ")") : "").attr("class", "".concat(isXAxis ? "x" : "y", "-axis")).call(axisCall).selectAll("text").attr("class", "".concat(isXAxis ? "x" : "y", "-text tick-text")).attr("transform", isXAxis ? "translate(-10,0)rotate(-45)" : "").style("text-anchor", "end");
+  f.append('g').attr('transform', isXAxis ? "translate(0, ".concat(plotHeight, ")") : '').attr('class', "".concat(isXAxis ? 'x' : 'y', "-axis")).call(axisCall).selectAll('text').attr('class', "".concat(isXAxis ? 'x' : 'y', "-text tick-text")).attr('transform', isXAxis ? 'translate(-10,0)rotate(-45)' : '').style('text-anchor', 'end');
 };
 exports.drawAxis = drawAxis;
-var tooltipContainer = d3.select("body").append("div").attr("class", "chart-tooltip").style("opacity", 0);
+var tooltipContainer = d3.select('body').append('div').attr('class', 'chart-tooltip').style('opacity', 0);
 var addTooltips = function addTooltips(f, contentFun) {
-  f.on("mouseover", function (event, d) {
-    tooltipContainer.transition().duration(200).style("opacity", 1);
-    tooltipContainer.html(contentFun(d)).style("left", event.pageX + "px").style("top", event.pageY + "px");
-  }).on("mouseout", function (d) {
-    tooltipContainer.transition().duration(500).style("opacity", 0);
+  f.on('mouseover', function (event, d) {
+    tooltipContainer.transition().duration(200).style('opacity', 1);
+    tooltipContainer.html(contentFun(d)).style('left', event.pageX + 'px').style('top', event.pageY + 'px');
+  }).on('mouseout', function (d) {
+    tooltipContainer.transition().duration(500).style('opacity', 0);
   });
 };
 exports.addTooltips = addTooltips;
@@ -31384,11 +31384,11 @@ var appendTextToXTicks = function appendTextToXTicks(_ref) {
   var res = d3.selectAll(selector);
   var selection = d3.select(res.nodes()[index]);
   var BBox = selection.node().getBBox();
-  var textNode = selection.append("text").attr("text-anchor", "middle").attr("y", BBox.height).attr("dy", "2em").attr("font-size", "15px").text(label);
+  var textNode = selection.append('text').attr('text-anchor', 'middle').attr('y', BBox.height).attr('dy', '2em').attr('font-size', '15px').text(label);
   var TextBBox = textNode.node().getBBox();
-  var TextBoxNode = selection.insert("rect", "text").attr("x", TextBBox.x - 10).attr("y", TextBBox.y - 10).attr("rx", 5).attr("dy", "0.7em").attr("fill", "yellow").attr("width", function (d) {
+  var TextBoxNode = selection.insert('rect', 'text').attr('x', TextBBox.x - 10).attr('y', TextBBox.y - 10).attr('rx', 5).attr('dy', '0.7em').attr('fill', 'yellow').attr('width', function (d) {
     return TextBBox.width + 20;
-  }).attr("height", function (d) {
+  }).attr('height', function (d) {
     return TextBBox.height + 20;
   });
   if (textAttrs) {
