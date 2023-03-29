@@ -31,13 +31,13 @@ verticalBarChart({
   selector: '#vertical_bar_force_symmetry',
   width: 650,
   height: 600,
-  data: inputData.slice(0, 3),
+  data: inputData.slice(0, 10),
   xLabel: 'ershgsretherthdrhtershgsreetherthdrhtershgsretherthdrht',
   yLabel: '變項',
   forceSymmetry: true,
   showBarText: false,
   padding: 0.9,
-  basedMargin: { bottom: 90 },
+  basedMargin: { bottom: 100 },
   barColor: d => (d.value > 0 ? '#bbffff' : '#ffbbdd'),
   tooltipContent: d => `<div>${d.name}</div>
   <div>value: ${d.value.toPrecision(3)}</div>`
@@ -45,6 +45,7 @@ verticalBarChart({
 
 appendTextToXTicks({
   selector: '#vertical_bar_force_symmetry .x-axis .tick',
+  index: 0,
   label: 'testttt',
   textAttrs: { fill: 'white' },
   textBoxAttrs: { fill: 'blue' }

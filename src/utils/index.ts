@@ -202,13 +202,18 @@ export const appendTextToXTicks = ({
 }: TAppendTextToYTicks) => {
   const res = d3.selectAll(selector);
 
+  let highestTicks = 0;
+
+  d3.selectAll(res.nodes()).each(function (d, i) {
+    const currTickHeight = (this as SVGSVGElement).getBBox().height;
+    highestTicks = currTickHeight > highestTicks ? currTickHeight : highestTicks;
+  });
   const selection = d3.select(res.nodes()[index]);
-  const BBox = (selection.node() as SVGSVGElement).getBBox();
 
   const textNode = selection
     .append('text')
     .attr('text-anchor', 'middle')
-    .attr('y', BBox.height)
+    .attr('y', highestTicks)
     .attr('dy', '2em')
     .attr('font-size', '15px')
     .attr('font-weight', 700)
