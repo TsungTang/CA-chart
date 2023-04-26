@@ -63,7 +63,7 @@ export const computedTextWidth = (
       width: originalTextWidth
     });
   });
-  const longestWidth = d3.max(res.map(d => d.width));
+  const longestWidth = d3.max(res.map(d => d.width)) as number;
   return {
     longestWidth,
     fittedLongestWidth: longestWidth > maxWidth ? maxWidth : longestWidth,
@@ -152,7 +152,7 @@ export const drawLine = (
   className?: string
 ) => {
   f.append('line')
-    .attr('class', className)
+    .attr('class', className ?? '')
     .style('stroke', '#555555')
     .style('stroke-width', 1)
     .style('stroke-dasharray', '10,5')
@@ -181,21 +181,20 @@ const tooltipContainer = d3
   .attr('class', 'chart-tooltip')
   .style('opacity', 0);
 
-export const addTooltips = <T extends d3.Selection<SVGRectElement, unknown, SVGGElement, unknown>>(
-  f: T,
-  contentFun: (d: any) => string
+export const addTooltips = <T extends Record<string, any> & { index: number }>(
+  f: d3.Selection<SVGRectElement, T, SVGGElement, unknown>,
+  contentFun: (d: any, index?: number) => string
 ) => {
-  f.on('mouseover', function (event, d) {
+  f.on('mouseover', function (event: MouseEvent, d) {
     tooltipContainer.transition().duration(200).style('opacity', 1);
     tooltipContainer
-      .html(contentFun(d))
+      .html(contentFun(d, d?.index))
       .style('left', event.pageX + 'px')
       .style('top', event.pageY + 'px');
   }).on('mouseout', function (d) {
     tooltipContainer.transition().duration(500).style('opacity', 0);
   });
 };
-
 export const appendTextToXTicks = ({
   selector,
   index = 0,

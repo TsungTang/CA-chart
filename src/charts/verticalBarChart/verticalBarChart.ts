@@ -21,7 +21,7 @@ export const verticalBarChart = ({
   height,
   xLabel,
   yLabel,
-  barColor,
+  barColor = '#ddd',
   basedMargin,
   showBarText = true,
   forceSymmetry = false,
@@ -40,6 +40,7 @@ export const verticalBarChart = ({
   const sideLength = hypotenuseLength / 2;
   const appendTruncateData = data.map((d, i) => ({
     ...d,
+    index: i,
     nameTruncateText: outputData[i].truncateText
   }));
 

@@ -12,7 +12,7 @@ export type TBarColor = TBarColorFun | ([string, string] | string);
 
 export type TDrawAxisParams = {
   f: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
-  axisCall: d3.Axis<d3.NumberValue | string>;
+  axisCall: d3.Axis<string> | d3.Axis<d3.NumberValue>;
   isXAxis: boolean;
   plotHeight?: number;
 };
@@ -37,6 +37,6 @@ export type TBarChart = {
   forceSymmetry?: boolean;
   basedMargin?: { top?: number; right?: number; bottom?: number; left?: number };
   padding?: number;
-  tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T) => string;
+  tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T, i?: number) => string;
   highlightBar?: number | number[] | ((params: TBarInputData, i?: number) => boolean);
 };

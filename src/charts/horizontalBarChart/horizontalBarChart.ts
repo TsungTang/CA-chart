@@ -19,7 +19,7 @@ export const horizontalBarChart = ({
   height,
   xLabel,
   yLabel,
-  barColor,
+  barColor = '#ddd',
   showBarText = true,
   forceSymmetry = false,
   padding = 0.1,
@@ -35,8 +35,9 @@ export const horizontalBarChart = ({
     }
   );
 
-  const appendTruncateData: TBarChartData[] = data.map((d, i) => ({
+  const appendTruncateData = data.map((d, i) => ({
     ...d,
+    index: i,
     nameTruncateText: outputData[i].truncateText
   }));
   const ml = fittedLongestWidth + 35;
