@@ -38,4 +38,5 @@ export type TBarChart = {
   basedMargin?: { top?: number; right?: number; bottom?: number; left?: number };
   padding?: number;
   tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T) => string;
+  highlightBar?: number | number[] | ((params: TBarInputData, i?: number) => boolean);
 };

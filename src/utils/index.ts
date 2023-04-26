@@ -6,6 +6,7 @@ import {
   TDrawAxisParams,
   TAppendTextToYTicks
 } from '../types';
+export * from './shadeColor/shadeColor';
 
 type TComputedTextWidthConfig = {
   maxWidth: number;
@@ -147,9 +148,11 @@ export const generateBarFillColorFun = (barColor: TBarColor): TBarColorFun => {
 export const drawLine = (
   f: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
   start: { x: number; y: number },
-  end: { x: number; y: number }
+  end: { x: number; y: number },
+  className?: string
 ) => {
   f.append('line')
+    .attr('class', className)
     .style('stroke', '#555555')
     .style('stroke-width', 1)
     .style('stroke-dasharray', '10,5')

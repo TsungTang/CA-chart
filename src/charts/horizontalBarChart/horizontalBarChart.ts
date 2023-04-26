@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { TBarChartData, TBarColor, TBarInputData } from '../../types';
+import { TBarChartData, TBarColor, TBarChart } from '../../types';
 import {
   computedTextWidth,
   yTextLabel,
@@ -10,19 +10,7 @@ import {
   drawAxis,
   addTooltips
 } from '../../utils';
-type TBarChart = {
-  selector: string;
-  data: TBarInputData[];
-  width: number;
-  height: number;
-  xLabel?: string;
-  yLabel?: string;
-  barColor?: TBarColor;
-  showBarText?: boolean;
-  forceSymmetry?: boolean;
-  padding?: number;
-  tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T) => string;
-};
+import svgFile from '../../svg/Polygon-90.svg';
 
 export const horizontalBarChart = ({
   selector,
@@ -35,7 +23,8 @@ export const horizontalBarChart = ({
   showBarText = true,
   forceSymmetry = false,
   padding = 0.1,
-  tooltipContent
+  tooltipContent,
+  highlightBar
 }: TBarChart) => {
   if (data.length > 10) throw new Error('Numbers of Bars shoud less or equal than 10');
   const { fittedLongestWidth, outputData } = computedTextWidth(
@@ -131,6 +120,32 @@ export const horizontalBarChart = ({
       .attr('dx', '.5em')
       .attr('x', x(0))
       .attr('y', d => y(d.nameTruncateText) + y.bandwidth() / 2);
+  }
+
+  if (highlightBar) {
+    svg
+      .selectAll('chart-rect')
+      .data(appendTruncateData)
+      .enter()
+      .append('svg:image')
+      .attr('xlink:href', svgFile)
+      .attr('width', 12)
+      .attr('height', 12)
+      .style('display', (d, i) => {
+        let show = false;
+        if (typeof highlightBar === 'number') {
+          show = i === highlightBar;
+        } else if (Array.isArray(highlightBar)) {
+          show = highlightBar.includes(i);
+        } else {
+          show = highlightBar(d, i);
+        }
+        return show ? '' : 'none';
+      })
+      .attr('x', d => (d.value > 0 ? x(d.value) : x(0)))
+      .attr('y', d => y(d.nameTruncateText) + y.bandwidth() / 2 - 6)
+      .attr('class', 'highlight-icon')
+      .style('transform', d => `translateX(${4}px)`);
   }
 
   // y axis label

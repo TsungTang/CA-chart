@@ -12,6 +12,7 @@ import {
   drawAxis,
   addTooltips
 } from '../../utils';
+import svgFile from '../../svg/Polygon.svg';
 
 export const verticalBarChart = ({
   selector,
@@ -25,7 +26,8 @@ export const verticalBarChart = ({
   showBarText = true,
   forceSymmetry = false,
   padding = 0.1,
-  tooltipContent
+  tooltipContent,
+  highlightBar
 }: TBarChart) => {
   const { fittedLongestWidth, outputData } = computedTextWidth(
     data.map(d => d.name),
@@ -100,6 +102,7 @@ export const verticalBarChart = ({
     .data(appendTruncateData)
     .enter()
     .append('rect')
+    .attr('class', 'chart-bar')
     .attr('x', d => x(d.nameTruncateText))
     .attr('y', d => y(Math.max(d.value, 0)))
     .attr('width', d => x.bandwidth())
@@ -127,6 +130,32 @@ export const verticalBarChart = ({
       .attr('dy', '-.5em')
       .attr('x', d => x(d.nameTruncateText) + x.bandwidth() / appendTruncateData.length)
       .attr('y', y(0));
+  }
+
+  if (highlightBar) {
+    svg
+      .selectAll('chart-rect')
+      .data(appendTruncateData)
+      .enter()
+      .append('svg:image')
+      .attr('xlink:href', svgFile)
+      .attr('width', 12)
+      .attr('height', 12)
+      .style('display', (d, i) => {
+        let show = false;
+        if (typeof highlightBar === 'number') {
+          show = i === highlightBar;
+        } else if (Array.isArray(highlightBar)) {
+          show = highlightBar.includes(i);
+        } else {
+          show = highlightBar(d, i);
+        }
+        return show ? '' : 'none';
+      })
+      .attr('class', 'highlight-icon')
+      .style('transform', d => `translateY(${-16}px)`)
+      .attr('x', d => x(d.nameTruncateText) + x.bandwidth() / 2 - 6)
+      .attr('y', d => (d.value < 0 ? y(0) : Math.abs(y(d.value))));
   }
 
   // y axis label
