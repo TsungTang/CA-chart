@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { TBarChartData, TBarColor, TBarChart } from '../../types';
+import { THorizontalBarChart } from '../../types';
 import {
   computedTextWidth,
   yTextLabel,
@@ -24,8 +24,10 @@ export const horizontalBarChart = ({
   forceSymmetry = false,
   padding = 0.1,
   tooltipContent,
-  highlightBar
-}: TBarChart) => {
+  highlightBar,
+  xTickFormat = d => d.toString(),
+  yTickFormat = d => d
+}: THorizontalBarChart) => {
   if (data.length > 10) throw new Error('Numbers of Bars shoud less or equal than 10');
   const { fittedLongestWidth, outputData } = computedTextWidth(
     data.map(d => d.name),
@@ -74,11 +76,17 @@ export const horizontalBarChart = ({
     .padding(padding);
 
   // axis
-  svg.call(f => drawAxis({ f, axisCall: d3.axisLeft(y).tickSizeOuter(0), isXAxis: false }));
   svg.call(f =>
     drawAxis({
       f,
-      axisCall: d3.axisBottom(x).tickSizeOuter(0),
+      axisCall: d3.axisLeft(y).tickSizeOuter(0).tickFormat(yTickFormat),
+      isXAxis: false
+    })
+  );
+  svg.call(f =>
+    drawAxis({
+      f,
+      axisCall: d3.axisBottom(x).tickSizeOuter(0).tickFormat(xTickFormat),
       isXAxis: true,
       plotHeight: plotHeight
     })

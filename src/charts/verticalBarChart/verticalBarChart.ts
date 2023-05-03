@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-import { TBarChart } from '../../types';
+import { TVerticalBarChart } from '../../types';
 
 import {
   computedTextWidth,
@@ -23,12 +23,14 @@ export const verticalBarChart = ({
   yLabel,
   barColor = '#ddd',
   basedMargin,
+  xTickFormat = d => d,
+  yTickFormat = d => d.toString(),
   showBarText = true,
   forceSymmetry = false,
   padding = 0.1,
   tooltipContent,
   highlightBar
-}: TBarChart) => {
+}: TVerticalBarChart) => {
   const { fittedLongestWidth, outputData } = computedTextWidth(
     data.map(d => d.name),
     {
@@ -80,12 +82,18 @@ export const verticalBarChart = ({
     .padding(padding);
 
   // axis
-  svg.call(f => drawAxis({ f, axisCall: d3.axisLeft(y).tickSizeOuter(0), isXAxis: false }));
+  svg.call(f =>
+    drawAxis({
+      f,
+      axisCall: d3.axisLeft(y).tickSizeOuter(0).tickFormat(yTickFormat),
+      isXAxis: false
+    })
+  );
 
   svg.call(f =>
     drawAxis({
       f,
-      axisCall: d3.axisBottom(x).tickSizeOuter(0),
+      axisCall: d3.axisBottom(x).tickSizeOuter(0).tickFormat(xTickFormat),
       isXAxis: true,
       plotHeight: plotHeight
     })

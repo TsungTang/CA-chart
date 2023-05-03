@@ -40,3 +40,13 @@ export type TBarChart = {
   tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T, i?: number) => string;
   highlightBar?: number | number[] | ((params: TBarInputData, i?: number) => boolean);
 };
+
+export type TVerticalBarChart = {
+  xTickFormat?: (domainValue: string, index: number) => string;
+  yTickFormat?: (domainValue: d3.NumberValue, index: number) => string;
+} & TBarChart;
+
+export type THorizontalBarChart = {
+  xTickFormat?: (domainValue: d3.NumberValue, index: number) => string;
+  yTickFormat?: (domainValue: string, index: number) => string;
+} & TBarChart;

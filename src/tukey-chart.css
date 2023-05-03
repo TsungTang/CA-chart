@@ -1,3 +1,11 @@
+.container {
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .tukey-chart .label {
   font-size: 18px;
   fill: #555555; /* table-gray */

@@ -62,3 +62,29 @@ appendTextToXTicks({
   textAttrs: { fill: 'white' },
   textBoxAttrs: { fill: 'blue' }
 });
+
+verticalBarChart({
+  selector: '#horizontal_bar_format_ticks',
+  width: 650,
+  height: 600,
+  data: data3,
+  xLabel: 'ershgsretherthdrhtershgsreetherthdrhtershgsretherthdrht',
+  yLabel: '變項',
+  forceSymmetry: true,
+  showBarText: false,
+  padding: 0.8,
+  yTickFormat(domainValue, index) {
+    return `${domainValue}##`;
+  },
+  xTickFormat(domainValue, index) {
+    return `${domainValue}@@`;
+  },
+  barColor: d => (d.value > 0 ? '#142033' : '#ed1527'),
+  tooltipContent: d => {
+    const isMaxEle = d.value === AbsMaximumValData3 || d.value === -AbsMaximumValData3;
+    const maxEleNotify = isMaxEle ? `<div>影響力最大</div>` : '';
+    return `${maxEleNotify}<div>${d.name}</div>
+  <div>value: ${d.value.toPrecision(3)}</div>`;
+  },
+  highlightBar: d => d.value === AbsMaximumValData3 || d.value === -AbsMaximumValData3
+});
