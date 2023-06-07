@@ -1,8 +1,14 @@
+import type { BaseType, Selection } from 'd3';
+import * as d3 from 'd3';
+
+export type TSelectorType = BaseType | string;
 export type TBarChartData = {
   name: string;
   value: number;
   nameTruncateText: string;
 };
+
+export type TScatterData = { x: number; y: number; index: number; group?: string };
 
 export type TBarInputData = Omit<TBarChartData, 'nameTruncateText'>;
 
@@ -39,6 +45,7 @@ export type TBarChart = {
   padding?: number;
   tooltipContent?: <T extends Record<string, any>>(d: TBarInputData & T, i?: number) => string;
   highlightBar?: number | number[] | ((params: TBarInputData, i?: number) => boolean);
+  baseline?: number;
 };
 
 export type TVerticalBarChart = {
@@ -50,3 +57,13 @@ export type THorizontalBarChart = {
   xTickFormat?: (domainValue: d3.NumberValue, index: number) => string;
   yTickFormat?: (domainValue: string, index: number) => string;
 } & TBarChart;
+
+export type TScatterChart = {
+  selector: string;
+  data: TScatterData[];
+  fillColor?: string | ((d: TScatterData) => string);
+  width: number;
+  height: number;
+  basedMargin?: { top?: number; right?: number; bottom?: number; left?: number };
+  tooltipContent?: <T extends Record<string, any>>(d: TScatterData & T, i?: number) => string;
+};

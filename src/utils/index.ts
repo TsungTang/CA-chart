@@ -165,14 +165,18 @@ export const drawLine = (
 export const drawAxis = (params: TDrawAxisParams) => {
   const { f, axisCall, isXAxis, plotHeight } = params;
 
-  f.append('g')
+  const axis = f
+    .append('g')
     .attr('transform', isXAxis ? `translate(0, ${plotHeight})` : '')
     .attr('class', `${isXAxis ? 'x' : 'y'}-axis`)
-    .call(axisCall)
+    .call(axisCall);
+
+  axis
     .selectAll('text')
     .attr('class', `${isXAxis ? 'x' : 'y'}-text tick-text`)
     .attr('transform', isXAxis ? 'translate(-10,0)rotate(-45)' : '')
     .style('text-anchor', 'end');
+  return { axis };
 };
 
 const tooltipContainer = d3
@@ -182,7 +186,7 @@ const tooltipContainer = d3
   .style('opacity', 0);
 
 export const addTooltips = <T extends Record<string, any> & { index: number }>(
-  f: d3.Selection<SVGRectElement, T, SVGGElement, unknown>,
+  f: d3.Selection<SVGRectElement | SVGCircleElement, T, SVGGElement, unknown>,
   contentFun: (d: any, index?: number) => string
 ) => {
   f.on('mouseover', function (event: MouseEvent, d) {

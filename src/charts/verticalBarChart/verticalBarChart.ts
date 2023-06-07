@@ -29,7 +29,8 @@ export const verticalBarChart = ({
   forceSymmetry = false,
   padding = 0.1,
   tooltipContent,
-  highlightBar
+  highlightBar,
+  baseline = 0
 }: TVerticalBarChart) => {
   const { fittedLongestWidth, outputData } = computedTextWidth(
     data.map(d => d.name),
@@ -99,8 +100,8 @@ export const verticalBarChart = ({
     })
   );
 
-  if (symmetryDomain) {
-    svg.call(f => drawLine(f, { x: 0, y: y(0) }, { x: plotWidth, y: y(0) }));
+  if (symmetryDomain || baseline !== 0) {
+    svg.call(f => drawLine(f, { x: 0, y: y(baseline) }, { x: plotWidth, y: y(baseline) }));
   }
 
   //Bars
@@ -113,9 +114,9 @@ export const verticalBarChart = ({
     .append('rect')
     .attr('class', 'chart-bar')
     .attr('x', d => x(d.nameTruncateText))
-    .attr('y', d => y(Math.max(d.value, 0)))
+    .attr('y', d => y(Math.max(d.value, baseline)))
     .attr('width', d => x.bandwidth())
-    .attr('height', d => Math.abs(y(d.value) - y(0)))
+    .attr('height', d => Math.abs(y(d.value) - y(baseline)))
     .attr('fill', barFillColorFun)
     .call(sel => {
       if (tooltipContent) {
@@ -138,7 +139,7 @@ export const verticalBarChart = ({
       .attr('class', 'bar-text')
       .attr('dy', '-.5em')
       .attr('x', d => x(d.nameTruncateText) + x.bandwidth() / appendTruncateData.length)
-      .attr('y', y(0));
+      .attr('y', y(baseline));
   }
 
   if (highlightBar) {
@@ -164,7 +165,7 @@ export const verticalBarChart = ({
       .attr('class', 'highlight-icon')
       .style('transform', d => `translateY(${-16}px)`)
       .attr('x', d => x(d.nameTruncateText) + x.bandwidth() / 2 - 6)
-      .attr('y', d => (d.value < 0 ? y(0) : Math.abs(y(d.value))));
+      .attr('y', d => (d.value < baseline ? y(baseline) : Math.abs(y(d.value))));
   }
 
   // y axis label
